@@ -1,4 +1,4 @@
-## ANXS - PostgreSQL [![Build Status](https://travis-ci.org/ANXS/postgresql.png)](https://travis-ci.org/ANXS/postgresql)
+## ANXS - PostgreSQL [![Build Status](https://travis-ci.org/ANXS/postgresql.png?branch=master)](https://travis-ci.org/ANXS/postgresql)
 
 Ansible role which installs and configures PostgreSQL, extensions, databases and users.
 
@@ -27,6 +27,7 @@ postgresql_databases:
   - name: foobar
     hstore: yes         # flag to install the hstore extension on this database (yes/no)
     uuid_ossp: yes      # flag to install the uuid-ossp extension on this database (yes/no)
+    citext: yes         # flag to install the citext extension on this database (yes/no)
 
 # List of users to be created (optional)
 postgresql_users:
