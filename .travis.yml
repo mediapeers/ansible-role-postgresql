@@ -36,9 +36,10 @@ script:
   - ansible-playbook -i tests/inventory tests/test.yml --connection=local -e "$ROLE_OPTIONS"
 
   # Idempotence test
+  # Allow 2 'changes'.
   - >
-    ansible-playbook -i tests/inventory tests/test.yml --connection=local
-#    | grep -q 'changed=0.*failed=0'
-#    && (echo 'Idempotence test: pass' && exit 0)
-#    || (echo 'Idempotence test: fail' && exit 1)
+    ansible-playbook -i tests/inventory tests/test.yml --connection=local -e "$ROLE_OPTIONS"
+    | grep -q 'changed=2.*failed=0'
+    && (echo 'Idempotence test: pass' && exit 0)
+    || (echo 'Idempotence test: fail' && exit 1)
 
