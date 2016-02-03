@@ -1,7 +1,5 @@
 ---
 - hosts: localhost
   become: true
-  vars:
-    postgresql_version: 9.5
   roles:
     - ansible-role-postgresql
