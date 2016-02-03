@@ -7,14 +7,7 @@ Ansible role which installs and configures PostgreSQL, extensions, databases and
 
 
 #### Installation
-
-This has been tested on Ansible 1.9.4 and higher.
-
-To install:
-
-```
-ansible-galaxy install ANXS.postgresql
-```
+Git clone this project.
 
 #### Dependencies
 

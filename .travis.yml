@@ -1,12 +1,10 @@
 ---
 sudo: required
 dist: trusty
-
 language: python
 python: "2.7"
+
 env:
-  - ROLE_OPTIONS="postgresql_version=9.1 postgresql_shared_buffers=32MB"
-  - ROLE_OPTIONS="postgresql_version=9.2 postgresql_shared_buffers=32MB"
   - ROLE_OPTIONS="postgresql_version=9.3 postgresql_shared_buffers=32MB"
   - ROLE_OPTIONS="postgresql_version=9.4 postgresql_shared_buffers=32MB"
   - ROLE_OPTIONS="postgresql_version=9.5 postgresql_shared_buffers=32MB"
@@ -24,17 +22,23 @@ before_install:
   - echo 'en_US.UTF-8 UTF-8' | sudo tee /var/lib/locales/supported.d/local
 
 install:
-  - pip install ansible==1.9.4
+  - pip install ansible
+  - ansible --version
+
+  # Add ansible.cfg to pick up roles path.
+  - "{ echo '[defaults]'; echo 'roles_path = ../'; } >> ansible.cfg"
 
 script:
-  - echo localhost > inventory
-
   # Syntax check
   - ansible-playbook -i inventory tests/playbook.yml --syntax-check
 
   # Play test
-  - ansible-playbook -i inventory tests/playbook.yml --connection=local --sudo -e "$ROLE_OPTIONS"
+  - ansible-playbook -i inventory tests/playbook.yml --connection=local -e "$ROLE_OPTIONS"
 
   # Idempotence test
-  - ansible-playbook -i inventory tests/playbook.yml --connection=local --sudo -e "$ROLE_OPTIONS" > idempotence_out
-  - ./tests/idempotence_check.sh idempotence_out
+  - >
+    ansible-playbook -i tests/inventory tests/$SITE --connection=local
+    | grep -q 'changed=0.*failed=0'
+    && (echo 'Idempotence test: pass' && exit 0)
+    || (echo 'Idempotence test: fail' && exit 1)
+
