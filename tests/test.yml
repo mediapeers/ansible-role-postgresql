@@ -4,4 +4,4 @@
   vars:
     postgresql_version: 9.5
   roles:
-    - postgresql
+    - ansible-role-postgresql
